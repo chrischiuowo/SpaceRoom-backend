@@ -9,6 +9,7 @@ var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/posts');
 var userRouter = require('./routes/users');
+var uploadRouter = require('./routes/upload');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/', indexRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/upload', uploadRouter);
 
 // catch 404 找不到路由
 app.use(function(req, res, next) {
