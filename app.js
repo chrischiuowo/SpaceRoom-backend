@@ -6,10 +6,11 @@ var logger = require('morgan');
 var connectDB = require('./service/connectHandle');
 
 var authRouter = require('./routes/auth');
+var uploadRouter = require('./routes/upload');
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/posts');
 var userRouter = require('./routes/users');
-var uploadRouter = require('./routes/upload');
+var likeRouter = require('./routes/likes');
 
 var app = express();
 
@@ -35,10 +36,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/api/posts', postRouter);
-app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/users', userRouter);
+app.use('/api/likes', likeRouter);
 
 // catch 404 找不到路由
 app.use(function(req, res, next) {

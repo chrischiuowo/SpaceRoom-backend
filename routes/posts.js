@@ -1,15 +1,21 @@
-var express = require('express');
-var router = express.Router();
-var postController = require('../controllers/post');
+const express = require('express');
+const router = express.Router();
+const postController = require('../controllers/post');
+const { isAuth } = require('../controllers/auth.js');
 
-router.get('/', postController.getAllData);
+// 取得所有貼文
+router.get('/', isAuth, postController.getAllData);
 
-router.post('/', postController.postData);
+// 上傳單一貼文
+router.post('/', isAuth, postController.postData);
 
-router.patch('/:id', postController.updateData);
+// 更新單一貼文
+router.patch('/:postId', isAuth, postController.updateData);
 
-router.delete('/:id', postController.deleteData);
+// 刪除單一貼文
+router.delete('/:postId', isAuth, postController.deleteData);
 
-router.delete('/', postController.deleteAllData);
+// 刪除所有貼文
+router.delete('/', isAuth, postController.deleteAllData);
 
 module.exports = router;

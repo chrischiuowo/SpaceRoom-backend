@@ -12,10 +12,14 @@ const postSchema = new Schema(
       type: String,
       required: [true, '貼文內容 為必填']
     },
-    image: {
+    images: {
       type: String,
       default: ''
     },
+    likes: [{
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    }],
     createdAt: {
       type: Number,
     },

@@ -3,9 +3,9 @@ const router = express.Router();
 const userController = require('../controllers/user.js');
 const { isAuth } = require('../controllers/auth.js');
 
-
 // 取得目前使用者資訊
 router.get('/currentUser', isAuth, userController.getCurrentUserInfo);
+
 // 更新目前使用者資訊
 router.patch('/currentUser', isAuth, userController.updateCurrentUserInfo);
 

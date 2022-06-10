@@ -1,4 +1,5 @@
 // User Controller
+const Post = require('../models/Post');
 const User = require('../models/User.js');
 const { successHandle } = require('../service/resHandle');
 const catchAsync = require('../service/catchAsync');
@@ -14,7 +15,7 @@ const getCurrentUserInfo = catchAsync(async(req, res, next) => {
   const { user } = req;
   const data = await User.findById(user?.id);
   if(!data) {
-    return next(appError(apiMessage.ID_FAIL, next))
+    return next(appError(apiMessage.DATA_NOT_FIND, next))
   }
   return successHandle({
     res, message: '取得當前使用者資料成功', data
@@ -59,7 +60,7 @@ const updateCurrentUserInfo = catchAsync(async(req, res, next) => {
     { runValidators: true, new: true }
   )
   if (!data) {
-    return next(appError(apiMessage.ID_FAIL, next))
+    return next(appError(apiMessage.DATA_NOT_FIND, next))
   }
   successHandle({ res, message: '更新當前使用者資料成功', data })
 });
@@ -104,7 +105,7 @@ const updatePassword = catchAsync(async(req, res, next) => {
     { new: true, runValidators: true }
   );
   if (!data) {
-    return next(appError(apiMessage.ID_FAIL, next))
+    return next(appError(apiMessage.DATA_NOT_FIND, next))
   }
   successHandle({
     res, message: '更新密碼成功'
