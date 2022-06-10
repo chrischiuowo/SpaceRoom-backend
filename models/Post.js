@@ -17,12 +17,17 @@ const postSchema = new Schema(
       default: ''
     },
     createdAt: {
-      type: Date,
-      default: Date.now
+      type: Number,
+    },
+    updatedAt: {
+      type: Number,
     }
   }, 
   {
-    versionKey: false
+    versionKey: false,
+    timestamps: {
+      currentTime: () => Date.now(),
+    },
   }
 );
 
