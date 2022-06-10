@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
 /*
   取得目前使用者資訊 GET
 */
-const getCurrentUserInfo = async(req, res, next) => {
+const getCurrentUserInfo = catchAsync(async(req, res, next) => {
   const { user } = req;
   const data = await User.findById(user?.id);
   if(!data) {
@@ -19,12 +19,12 @@ const getCurrentUserInfo = async(req, res, next) => {
   return successHandle({
     res, message: '取得當前使用者資料成功', data
   });
-};
+});
 
 /*
   更新目前使用者資訊 PATCH
 */
-const updateCurrentUserInfo = async(req, res, next) => {
+const updateCurrentUserInfo = catchAsync(async(req, res, next) => {
   const { user } = req;
   let { name, avatar, gender } = req.body;
   let newData = {};
@@ -62,12 +62,12 @@ const updateCurrentUserInfo = async(req, res, next) => {
     return next(appError(apiMessage.ID_FAIL, next))
   }
   successHandle({ res, message: '更新當前使用者資料成功', data })
-};
+});
 
 /*
   更新密碼 PATCH
 */
-const updatePassword = async(req, res, next) => {
+const updatePassword = catchAsync(async(req, res, next) => {
   let { password, confirmPassword } = req.body;
   const { user } = req;
   const errCode = 400;
@@ -109,7 +109,7 @@ const updatePassword = async(req, res, next) => {
   successHandle({
     res, message: '更新密碼成功'
   });
-};
+});
 
 module.exports = {
   getCurrentUserInfo, updateCurrentUserInfo, updatePassword

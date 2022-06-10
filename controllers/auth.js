@@ -206,7 +206,7 @@ const checkToken = catchAsync(async(req, res, next) => {
 });
 
 /*
-  驗證是否登入用middleware
+  驗證是否登入用 middleware
 */
 const isAuth = catchAsync(async(req, res, next) => {
   // 確認 token
