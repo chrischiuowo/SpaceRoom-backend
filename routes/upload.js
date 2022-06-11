@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { isAuth } = require('../controllers/auth.js');
 const uploadController = require('../controllers/upload.js');
-const checkUpload = uploadController.checkUpload;
+const { checkUpload } = require('../middlewares/upload.js');
+const { isAuth } = require('../middlewares/auth.js');
 
 // 上傳圖片
-router.post('/', isAuth, checkUpload, uploadController.postImages);
+router.post('/upload', isAuth, checkUpload, uploadController.postImages);
 
 module.exports = router;

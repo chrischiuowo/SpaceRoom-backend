@@ -8,17 +8,21 @@ const apiMessage = {
     message: '成功',
     statusCode: 200,
   },
-  FIELD_FAIL: {
-    message: '資料欄位有誤或缺少欄位',
+  FIELD_FAILED: {
+    message: '請確認資料欄位 或 路由參數 錯誤',
     statusCode: 400,
   },
-  DATA_NOT_FIND: {
-    message: '請確認ＩＤ是否存在，找不到對應的ＩＤ 和 資料',
+  DATA_NOT_FOUND: {
+    message: '請確認資料是否存在，找不到對應的 ＩＤ 和 資料',
     statusCode: 400,
   },
   LOGIN_FAILED: {
     message: '登入失敗',
-    statusCode: 400,
+    statusCode: 401,
+  },
+  TOKEN_FAILED: {
+    message: '請確認token是否 過期 或 錯誤',
+    statusCode: 401,
   },
   PERMISSION_DENIED: {
     message: '權限不足',
