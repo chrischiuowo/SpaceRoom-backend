@@ -20,7 +20,11 @@ const getAllData = catchAsync(async(req, res, next) => {
     .populate({
       path: 'user',
       select: 'name image'
-    }).sort(sort);
+    })
+    .populate({
+      path: 'comments'
+    })
+    .sort(sort);
 
   successHandle({
     res, message: '取得貼文成功', data
@@ -42,7 +46,11 @@ const getCurrentUserAllData = catchAsync(async(req, res, next) => {
     .populate({
       path: 'user',
       select: 'name image'
-    }).sort(sort);
+    })
+    .populate({
+      path: 'comments'
+    })
+    .sort(sort);
 
   successHandle({
     res, message: '取得貼文成功', data
