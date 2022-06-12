@@ -29,7 +29,7 @@ const getPostLikes = catchAsync(async(req, res, next) => {
 });
 
 /*
-  按讚貼文 與 取消讚貼文 POST
+  按讚貼文 與 取消讚貼文 PATCH
 */
 const togglePostLikes = catchAsync(async(req, res, next) => {
   const { post_id, likeMode } = req.query;

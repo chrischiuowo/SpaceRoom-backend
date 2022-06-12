@@ -7,6 +7,6 @@ const { isAuth } = require('../middlewares/auth.js');
 router.get('/likes', isAuth, likeController.getPostLikes);
 
 // 按讚貼文 與 取消讚貼文
-router.post('/likes', isAuth, likeController.togglePostLikes);
+router.patch('/likes', isAuth, likeController.togglePostLikes);
 
 module.exports = router;
