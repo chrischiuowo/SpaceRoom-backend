@@ -14,6 +14,7 @@ var postRouter = require('./routes/posts');
 var userRouter = require('./routes/users');
 var likeRouter = require('./routes/likes');
 var commentRouter = require('./routes/comments');
+var followRouter = require('./routes/follows');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use('/api', postRouter);
 app.use('/api', userRouter);
 app.use('/api', likeRouter);
 app.use('/api', commentRouter);
+app.use('/api', followRouter);
 
 // catch 404 找不到路由
 app.use(function(req, res, next) {

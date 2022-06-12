@@ -32,14 +32,14 @@ const getPostLikes = catchAsync(async(req, res, next) => {
   按讚貼文 與 取消讚貼文 PATCH
 */
 const togglePostLikes = catchAsync(async(req, res, next) => {
-  const { post_id, likeMode } = req.query;
+  const { post_id, like_mode } = req.query;
   const user_id = req.user_id;
-  let likeToggle = likeMode === 'add' ? true : false;
+  let like_toggle = like_mode === 'add' ? true : false;
   let data;
 
-  if(!post_id || !likeMode) return next(appError(apiMessage.FIELD_FAILED, next));
+  if(!post_id || !like_mode) return next(appError(apiMessage.FIELD_FAILED, next));
 
-  if(likeToggle) {
+  if(like_toggle) {
     data = await Post.findOneAndUpdate(
       { _id: post_id },
       { 
@@ -64,7 +64,7 @@ const togglePostLikes = catchAsync(async(req, res, next) => {
 
   if(!data) return next(appError(apiMessage.DATA_NOT_FOUND, next));
 
-  if(likeToggle) {
+  if(like_toggle) {
     successHandle({
       res, message: '已成功按讚', data
     });
