@@ -7,23 +7,26 @@ const appError = require('../service/appError');
 const apiMessage = require('../service/apiMessage');
 
 /*
-  取得按讚貼文數量 GET
+  取得貼文按讚數量 GET
 */
 const getPostLikes = catchAsync(async(req, res, next) => {
   const { post_id } = req.query;
 
   if(!post_id) return next(appError(apiMessage.FIELD_FAILED, next));
 
-  const data = await Post.findById(post_id).select('_id likes');
+  const data = await Post.findById(post_id).select('_id likes').populate({
+    path: 'likes',
+    select: 'name avatar',
+  });
 
   if(!data) return next(appError(apiMessage.DATA_NOT_FOUND, next));
 
   successHandle({
     res, 
-    message: '取得按讚貼文數量成功',
+    message: '取得貼文按讚數量成功',
     data: {
-      likeLength: data.likes.length,
-      nowPost: data
+      like_length: data.likes.length,
+      post_list: data
     }
   });
 });
