@@ -22,7 +22,14 @@ router.post("/post/1", isAuth, postController.createPost);
 router.patch("/post/1/:post_id", isAuth, postController.updatePost);
 
 // 刪除單一貼文
-router.delete("/post/1/:post_id", isAuth, postController.deletePost);
+router.delete("/post/1/:post_id", isAuth, postController.deleteOnlyPost);
+
+// 刪除使用者所有貼文
+router.delete(
+  "/posts/user/:target_user_id",
+  isAuth,
+  postController.deleteUserPosts
+);
 
 // 刪除所有貼文
 router.delete("/posts", isAuth, postController.deletePosts);

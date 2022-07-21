@@ -19,4 +19,15 @@ router.delete(
   commentController.deleteComment
 );
 
+// 新增回覆留言
+router.post(
+  "/comment/1/:post_id/:comment_id",
+  isAuth,
+  commentController.postCommentReply
+);
+
+// 更新回覆留言
+
+// 刪除回覆留言
+
 module.exports = router;

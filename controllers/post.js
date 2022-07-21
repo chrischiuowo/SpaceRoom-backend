@@ -76,6 +76,10 @@ const getUserPosts = catchAsync(async (req, res, next) => {
   const sort =
     s === "hot" ? { likes: -1 } : s === "new" ? "-createdAt" : "createdAt";
 
+  if (!target_user_id) {
+    return next(appError(apiMessage.FIELD_FAILED, next));
+  }
+
   const data = await Post.find({ user: target_user_id, query })
     .populate({
       path: "user",
@@ -175,7 +179,7 @@ const updatePost = catchAsync(async (req, res, next) => {
 /*
   刪除單一貼文 DELETE
 */
-const deletePost = catchAsync(async (req, res, next) => {
+const deleteOnlyPost = catchAsync(async (req, res, next) => {
   const { post_id } = req.params;
   const user_id = req.user_id;
 
@@ -198,7 +202,27 @@ const deletePost = catchAsync(async (req, res, next) => {
 });
 
 /*
-  刪除所有貼文 DELETE
+  刪除使用者所有貼文 DELETE
+*/
+const deleteUserPosts = catchAsync(async (req, res, next) => {
+  const { target_user_id } = req.params;
+
+  if (!target_user_id) {
+    return next(appError(apiMessage.FIELD_FAILED, next));
+  }
+
+  await Post.deleteMany({ user: target_user_id });
+
+  const data = await Post.find({ user: target_user_id });
+  successHandle({
+    res,
+    message: "刪除使用者所有貼文成功",
+    data,
+  });
+});
+
+/*
+  刪除資料庫所有貼文 DELETE
 */
 const deletePosts = catchAsync(async (req, res, next) => {
   await Post.deleteMany({});
@@ -217,6 +241,7 @@ module.exports = {
   getPostLikes,
   createPost,
   updatePost,
-  deletePost,
+  deleteOnlyPost,
+  deleteUserPosts,
   deletePosts,
 };
