@@ -146,19 +146,19 @@ const postCommentReply = catchAsync(async (req, res, next) => {
   更新回覆留言 PATCH
 */
 const updateCommentReply = catchAsync(async (req, res, next) => {
-  const { comment_id } = req.params
+  const { reply_id } = req.params
   const { user_id } = req
   const { content } = req.body
 
-  if (!comment_id || !user_id || !content) {
+  if (!reply_id || !user_id || !content) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
-  const comment = await Comment.findById(comment_id)
+  const commentReply = await CommentReply.findById(reply_id)
 
-  if (comment) {
-    const data = await Comment.findOneAndUpdate(
-      { _id: comment_id, post: comment.post },
+  if (commentReply) {
+    const data = await CommentReply.findOneAndUpdate(
+      { _id: reply_id, post: commentReply.post },
       { content },
       { new: true }
     )
@@ -176,19 +176,19 @@ const updateCommentReply = catchAsync(async (req, res, next) => {
   刪除回覆留言 DELETE
 */
 const deleteCommentReply = catchAsync(async (req, res, next) => {
-  const { comment_id } = req.params
+  const { reply_id } = req.params
   const { user_id } = req
 
-  if (!user_id || !comment_id) {
+  if (!user_id || !reply_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
-  const comment = await Comment.findById(comment_id)
+  const commentReply = await CommentReply.findById(reply_id)
 
-  if (comment) {
-    const data = await Comment.findOneAndDelete({
-      _id: comment_id,
-      post: comment.post
+  if (commentReply) {
+    const data = await CommentReply.findOneAndDelete({
+      _id: reply_id,
+      post: commentReply.post
     })
     successHandle({
       res,
