@@ -38,6 +38,7 @@ const commentReplySchema = new Schema(
 )
 
 commentReplySchema.pre(/^find/, function (next) {
+  this.sort('-createdAt')
   this.populate({
     path: 'user',
     select: '_id name avatar'

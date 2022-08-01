@@ -13,11 +13,12 @@ const getPosts = catchAsync(async (req, res, next) => {
   // q => 搜尋項目
   // s => 資料排序
   // p => 取得頁數
-  const { q, s, p } = req.query
+  const { q, s, p, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
-  const limit = p ? 15 : 0
+  const commonSort = cs === 'old' ? 1 : -1
+  const limit = p ? 8 : 0
   const skip = p === 1 ? 0 : (p - 1) * limit
 
   const data = await Post.find(query)
@@ -28,7 +29,8 @@ const getPosts = catchAsync(async (req, res, next) => {
       select: 'name avatar'
     })
     .populate({
-      path: 'comments'
+      path: 'comments',
+      options: { sort: { createdAt: commonSort } }
     })
     .sort(sort)
 
@@ -76,10 +78,11 @@ const getUserPosts = catchAsync(async (req, res, next) => {
   // q => 搜尋項目
   // s => 資料排序
   const { target_user_id } = req.params
-  const { q, s } = req.query
+  const { q, s, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
+  const commonSort = cs === 'old' ? 1 : -1
 
   if (!target_user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
@@ -91,7 +94,8 @@ const getUserPosts = catchAsync(async (req, res, next) => {
       select: 'name avatar'
     })
     .populate({
-      path: 'comments'
+      path: 'comments',
+      options: { sort: { created_at: commonSort } }
     })
     .sort(sort)
 
