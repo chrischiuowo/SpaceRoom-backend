@@ -118,10 +118,14 @@ const getPostLikes = catchAsync(async (req, res, next) => {
 
   const data = await Post.find({
     likes: { $in: [target_user_id] }
-  }).populate({
-    path: 'user',
-    select: 'name avatar'
   })
+    .populate({
+      path: 'user',
+      select: 'name avatar'
+    })
+    .populate({
+      path: 'comments'
+    })
 
   if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
