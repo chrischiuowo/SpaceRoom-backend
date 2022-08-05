@@ -10,10 +10,10 @@ router.get('/posts', isAuth, postController.getPosts)
 router.get('/post/1/:post_id', isAuth, postController.getOnlyPost)
 
 // 取得使用者所有貼文
-router.get('/posts/user/:target_user_id', isAuth, postController.getUserPosts)
+router.get('/posts/user/:user_id', isAuth, postController.getUserPosts)
 
 // 取得使用者按讚的貼文
-router.get('/posts/likes/:target_user_id', isAuth, postController.getPostLikes)
+router.get('/posts/likes/:user_id', isAuth, postController.getPostLikes)
 
 // 上傳單一貼文
 router.post('/post/1', isAuth, postController.createPost)
@@ -26,7 +26,7 @@ router.delete('/post/1/:post_id', isAuth, postController.deleteOnlyPost)
 
 // 刪除使用者所有貼文
 router.delete(
-  '/posts/user/:target_user_id',
+  '/posts/user/:user_id',
   isAuth,
   postController.deleteUserPosts
 )

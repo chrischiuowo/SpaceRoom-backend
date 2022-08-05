@@ -36,7 +36,7 @@ const isAuth = catchAsync(async (req, res, next) => {
     if (findErr) {
       return next(appError(apiMessage.LOGIN_FAILED, next))
     } else {
-      req.user_id = findRes._id
+      req.now_user_id = findRes._id
       next()
     }
   })

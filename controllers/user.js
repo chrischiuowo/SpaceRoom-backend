@@ -12,11 +12,11 @@ const bcrypt = require('bcryptjs')
   取得目前使用者資訊 GET
 */
 const getCurrentUserInfo = catchAsync(async (req, res, next) => {
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
 
-  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
+  if (!now_user_id) return next(appError(apiMessage.FIELD_FAILED, next))
 
-  const data = await User.findById(user_id)
+  const data = await User.findById(now_user_id)
 
   if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
@@ -31,12 +31,12 @@ const getCurrentUserInfo = catchAsync(async (req, res, next) => {
   更新目前使用者資訊 PATCH
 */
 const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
   let { name, avatar, gender } = req.body
   const new_data = {}
   name = name.trim()
 
-  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
+  if (!now_user_id) return next(appError(apiMessage.FIELD_FAILED, next))
 
   if (name !== undefined && name?.length >= 2) {
     new_data.name = name
@@ -72,7 +72,7 @@ const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
     new_data.gender = gender
   }
 
-  const data = await User.findByIdAndUpdate(user_id, new_data, {
+  const data = await User.findByIdAndUpdate(now_user_id, new_data, {
     runValidators: true,
     new: true
   })
@@ -88,7 +88,7 @@ const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
 */
 const updatePassword = catchAsync(async (req, res, next) => {
   const { password, confirm_password } = req.body
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
   const err_code = 400
 
   // 驗證項目不得為空
@@ -145,7 +145,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 
   // 更新
   const data = await User.findByIdAndUpdate(
-    user_id,
+    now_user_id,
     { password: new_password },
     { new: true, runValidators: true }
   )

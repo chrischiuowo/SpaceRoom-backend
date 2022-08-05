@@ -77,18 +77,18 @@ const getOnlyPost = catchAsync(async (req, res, next) => {
 const getUserPosts = catchAsync(async (req, res, next) => {
   // q => 搜尋項目
   // s => 資料排序
-  const { target_user_id } = req.params
+  const { user_id } = req.params
   const { q, s, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
   const commonSort = cs === 'old' ? 1 : -1
 
-  if (!target_user_id) {
+  if (!user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
-  const data = await Post.find({ user: target_user_id, query })
+  const data = await Post.find({ user: user_id, query })
     .populate({
       path: 'user',
       select: 'name avatar'
@@ -110,14 +110,14 @@ const getUserPosts = catchAsync(async (req, res, next) => {
   取得使用者按讚的貼文 GET
 */
 const getPostLikes = catchAsync(async (req, res, next) => {
-  const { target_user_id } = req.params
+  const { user_id } = req.params
 
-  if (!target_user_id) {
+  if (!user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
   const data = await Post.find({
-    likes: { $in: [target_user_id] }
+    likes: { $in: [user_id] }
   })
     .populate({
       path: 'user',
@@ -141,14 +141,14 @@ const getPostLikes = catchAsync(async (req, res, next) => {
 */
 const createPost = catchAsync(async (req, res, next) => {
   const { content, images } = req.body
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
 
-  if (!content || !user_id) {
+  if (!content || !now_user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
   const data = await Post.create({
-    user: user_id,
+    user: now_user_id,
     content,
     images
   })
@@ -166,9 +166,9 @@ const createPost = catchAsync(async (req, res, next) => {
 const updatePost = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
   const { content, images } = req.body
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
 
-  if (!post_id || !content || !user_id) {
+  if (!post_id || !content || !now_user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -194,9 +194,9 @@ const updatePost = catchAsync(async (req, res, next) => {
 */
 const deleteOnlyPost = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
 
-  if (!post_id || !user_id) {
+  if (!post_id || !now_user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -218,15 +218,15 @@ const deleteOnlyPost = catchAsync(async (req, res, next) => {
   刪除使用者所有貼文 DELETE
 */
 const deleteUserPosts = catchAsync(async (req, res, next) => {
-  const { target_user_id } = req.params
+  const { user_id } = req.params
 
-  if (!target_user_id) {
+  if (!user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
-  await Post.deleteMany({ user: target_user_id })
+  await Post.deleteMany({ user: user_id })
 
-  const data = await Post.find({ user: target_user_id })
+  const data = await Post.find({ user: user_id })
   successHandle({
     res,
     message: '刪除使用者所有貼文成功',

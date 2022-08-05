@@ -36,7 +36,7 @@ const getPostLikes = catchAsync(async (req, res, next) => {
 */
 const togglePostLikes = catchAsync(async (req, res, next) => {
   const { post_id, like_mode } = req.query
-  const user_id = req.user_id
+  const now_user_id = req.now_user_id
   const like_toggle = like_mode === 'add'
   let data
 
@@ -47,7 +47,7 @@ const togglePostLikes = catchAsync(async (req, res, next) => {
       { _id: post_id },
       {
         $addToSet: {
-          likes: user_id
+          likes: now_user_id
         }
       },
       { new: true }
@@ -57,7 +57,7 @@ const togglePostLikes = catchAsync(async (req, res, next) => {
       { _id: post_id },
       {
         $pull: {
-          likes: user_id
+          likes: now_user_id
         }
       },
       { new: true }
