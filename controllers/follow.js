@@ -77,7 +77,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       { _id: now_user_id },
       {
         $pull: {
-          followings: { user: user_id, createdAt: Date.now() }
+          followings: { user: user_id }
         }
       },
       { new: true }
@@ -86,7 +86,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       { _id: user_id },
       {
         $pull: {
-          followers: { user: now_user_id, createdAt: Date.now() }
+          followers: { user: now_user_id }
         }
       }
     )
