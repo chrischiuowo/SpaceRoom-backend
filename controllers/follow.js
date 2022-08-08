@@ -47,7 +47,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
 
   if (!user_id || !follow_mode) { return next(appError(apiMessage.FIELD_FAILED, next)) }
 
-  if (now_user_id === user_id) {
+  if (now_user_id.toString() === user_id) {
     return next(appError({
       message: '不能追蹤自己',
       statusCode: 400
