@@ -4,13 +4,13 @@ const userController = require('../controllers/user')
 const { isAuth } = require('../middlewares/auth')
 
 // 取得目前使用者資訊
-router.get('/users/current_user', isAuth, userController.getCurrentUserInfo)
+router.get('/users/:user_id', isAuth, userController.getUserInfo)
 
 // 更新目前使用者資訊
 router.patch(
-  '/users/current_user',
+  '/users/:user_id',
   isAuth,
-  userController.updateCurrentUserInfo
+  userController.updateUserInfo
 )
 
 // 更新密碼

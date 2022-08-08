@@ -1,5 +1,4 @@
 // User Controller
-// const Post = require('../models/Post')
 const User = require('../models/User')
 const successHandle = require('../service/successHandle')
 const catchAsync = require('../service/catchAsync')
@@ -11,32 +10,32 @@ const bcrypt = require('bcryptjs')
 /*
   取得目前使用者資訊 GET
 */
-const getCurrentUserInfo = catchAsync(async (req, res, next) => {
-  const now_user_id = req.now_user_id
+const getUserInfo = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
 
-  if (!now_user_id) return next(appError(apiMessage.FIELD_FAILED, next))
+  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
 
-  const data = await User.findById(now_user_id)
+  const data = await User.findById(user_id)
 
   if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
   successHandle({
     res,
-    message: '取得當前使用者資料成功',
+    message: '取得使用者資料成功',
     data
   })
 })
 
 /*
-  更新目前使用者資訊 PATCH
+  更新使用者資訊 PATCH
 */
-const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
-  const now_user_id = req.now_user_id
+const updateUserInfo = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
   let { name, avatar, gender } = req.body
   const new_data = {}
   name = name.trim()
 
-  if (!now_user_id) return next(appError(apiMessage.FIELD_FAILED, next))
+  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
 
   if (name !== undefined && name?.length >= 2) {
     new_data.name = name
@@ -72,7 +71,7 @@ const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
     new_data.gender = gender
   }
 
-  const data = await User.findByIdAndUpdate(now_user_id, new_data, {
+  const data = await User.findByIdAndUpdate(user_id, new_data, {
     runValidators: true,
     new: true
   })
@@ -80,7 +79,7 @@ const updateCurrentUserInfo = catchAsync(async (req, res, next) => {
     return next(appError(apiMessage.DATA_NOT_FOUND, next))
   }
 
-  successHandle({ res, message: '更新當前使用者資料成功', data })
+  successHandle({ res, message: '更新使用者資料成功', data })
 })
 
 /*
@@ -159,7 +158,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 })
 
 module.exports = {
-  getCurrentUserInfo,
-  updateCurrentUserInfo,
+  getUserInfo,
+  updateUserInfo,
   updatePassword
 }
