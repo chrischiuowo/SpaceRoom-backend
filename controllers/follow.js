@@ -56,7 +56,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       },
       {
         $addToSet: {
-          followings: { user: user_id }
+          followings: { user: user_id, createdAt: Date.now() }
         }
       },
       { new: true }
@@ -68,7 +68,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       },
       {
         $addToSet: {
-          followers: { user: now_user_id }
+          followers: { user: now_user_id, createdAt: Date.now() }
         }
       }
     )
@@ -77,7 +77,7 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       { _id: now_user_id },
       {
         $pull: {
-          followings: { user: user_id }
+          followings: { user: user_id, createdAt: Date.now() }
         }
       },
       { new: true }
@@ -86,21 +86,31 @@ const toggleFollows = catchAsync(async (req, res, next) => {
       { _id: user_id },
       {
         $pull: {
-          followers: { user: now_user_id }
+          followers: { user: now_user_id, createdAt: Date.now() }
         }
       }
     )
   }
 
-  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
-
   if (follow_toggle) {
+    if (!data) {
+      return next(appError({
+        message: '已追蹤對方',
+        statusCode: 400
+      }, next))
+    }
     successHandle({
       res,
       message: '追蹤成功',
       data
     })
   } else {
+    if (!data) {
+      return next(appError({
+        message: '已取消追蹤對方',
+        statusCode: 400
+      }, next))
+    }
     successHandle({
       res,
       message: '取消追蹤成功',
