@@ -77,25 +77,30 @@ const getOnlyPost = catchAsync(async (req, res, next) => {
 const getUserPosts = catchAsync(async (req, res, next) => {
   // q => 搜尋項目
   // s => 資料排序
+  // p => 取得頁數
   const { user_id } = req.params
-  const { q, s, cs } = req.query
+  const { q, s, p, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
   const commonSort = cs === 'old' ? 1 : -1
+  const limit = p ? 8 : 0
+  const skip = p === 1 ? 0 : (p - 1) * limit
 
   if (!user_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
   const data = await Post.find({ user: user_id, query })
+    .skip(skip)
+    .limit(limit)
     .populate({
       path: 'user',
       select: 'name avatar'
     })
     .populate({
       path: 'comments',
-      options: { sort: { created_at: commonSort } }
+      options: { sort: { createdAt: commonSort } }
     })
     .sort(sort)
 
