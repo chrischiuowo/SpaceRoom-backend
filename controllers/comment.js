@@ -12,9 +12,9 @@ const apiMessage = require('../service/apiMessage')
 */
 const getComments = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
 
-  if (!user_id || !post_id) {
+  if (!now_user_id || !post_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -38,15 +38,15 @@ const getComments = catchAsync(async (req, res, next) => {
 */
 const postComment = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
   const { content } = req.body
 
-  if (!user_id || !post_id || !content) {
+  if (!now_user_id || !post_id || !content) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
   const data = await Comment.create({
-    user: user_id,
+    user: now_user_id,
     post: post_id,
     content
   })
@@ -63,10 +63,10 @@ const postComment = catchAsync(async (req, res, next) => {
 */
 const updateComment = catchAsync(async (req, res, next) => {
   const { comment_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
   const { content } = req.body
 
-  if (!comment_id || !user_id || !content) {
+  if (!comment_id || !now_user_id || !content) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -93,9 +93,9 @@ const updateComment = catchAsync(async (req, res, next) => {
 */
 const deleteComment = catchAsync(async (req, res, next) => {
   const { comment_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
 
-  if (!user_id || !comment_id) {
+  if (!now_user_id || !comment_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -121,15 +121,15 @@ const deleteComment = catchAsync(async (req, res, next) => {
 */
 const postCommentReply = catchAsync(async (req, res, next) => {
   const { post_id, comment_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
   const { content } = req.body
 
-  if (!user_id || !post_id || !comment_id || !content) {
+  if (!now_user_id || !post_id || !comment_id || !content) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
   const data = await CommentReply.create({
-    user: user_id,
+    user: now_user_id,
     post: post_id,
     comment: comment_id,
     content
@@ -147,10 +147,10 @@ const postCommentReply = catchAsync(async (req, res, next) => {
 */
 const updateCommentReply = catchAsync(async (req, res, next) => {
   const { reply_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
   const { content } = req.body
 
-  if (!reply_id || !user_id || !content) {
+  if (!reply_id || !now_user_id || !content) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
@@ -177,9 +177,9 @@ const updateCommentReply = catchAsync(async (req, res, next) => {
 */
 const deleteCommentReply = catchAsync(async (req, res, next) => {
   const { reply_id } = req.params
-  const { user_id } = req
+  const { now_user_id } = req.now_user_id
 
-  if (!user_id || !reply_id) {
+  if (!now_user_id || !reply_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
   }
 
