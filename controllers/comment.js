@@ -12,7 +12,7 @@ const apiMessage = require('../service/apiMessage')
 */
 const getComments = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
 
   if (!now_user_id || !post_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
@@ -38,7 +38,7 @@ const getComments = catchAsync(async (req, res, next) => {
 */
 const postComment = catchAsync(async (req, res, next) => {
   const { post_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
   const { content } = req.body
 
   if (!now_user_id || !post_id || !content) {
@@ -63,7 +63,7 @@ const postComment = catchAsync(async (req, res, next) => {
 */
 const updateComment = catchAsync(async (req, res, next) => {
   const { comment_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
   const { content } = req.body
 
   if (!comment_id || !now_user_id || !content) {
@@ -93,7 +93,7 @@ const updateComment = catchAsync(async (req, res, next) => {
 */
 const deleteComment = catchAsync(async (req, res, next) => {
   const { comment_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
 
   if (!now_user_id || !comment_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
@@ -121,7 +121,7 @@ const deleteComment = catchAsync(async (req, res, next) => {
 */
 const postCommentReply = catchAsync(async (req, res, next) => {
   const { post_id, comment_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
   const { content } = req.body
 
   if (!now_user_id || !post_id || !comment_id || !content) {
@@ -147,7 +147,7 @@ const postCommentReply = catchAsync(async (req, res, next) => {
 */
 const updateCommentReply = catchAsync(async (req, res, next) => {
   const { reply_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
   const { content } = req.body
 
   if (!reply_id || !now_user_id || !content) {
@@ -177,7 +177,7 @@ const updateCommentReply = catchAsync(async (req, res, next) => {
 */
 const deleteCommentReply = catchAsync(async (req, res, next) => {
   const { reply_id } = req.params
-  const { now_user_id } = req.now_user_id
+  const now_user_id = req.now_user_id
 
   if (!now_user_id || !reply_id) {
     return next(appError(apiMessage.FIELD_FAILED, next))
