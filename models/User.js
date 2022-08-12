@@ -25,20 +25,14 @@ const userSchema = new Schema(
       trim: true,
       select: false
     },
-    // 性別
-    gender: {
-      type: String,
-      required: false,
-      enum: {
-        values: ['male', 'female'],
-        message: '不接受 {VALUE}，僅接受 male, female'
-      }
-    },
     // 大頭照 驗證解析度寬度至少 300、圖片寬高比 1:1
     avatar: {
-      type: String,
+      type: Object,
       required: false,
-      default: ' '
+      default: {
+        link: '',
+        hash: ''
+      }
     },
     // 追蹤名單
     followings: [

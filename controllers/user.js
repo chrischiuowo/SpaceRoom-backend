@@ -31,7 +31,7 @@ const getUserInfo = catchAsync(async (req, res, next) => {
 */
 const updateUserInfo = catchAsync(async (req, res, next) => {
   const { user_id } = req.params
-  let { name, avatar, gender } = req.body
+  let { name, avatar } = req.body
   const new_data = {}
   name = name.trim()
 
@@ -53,22 +53,6 @@ const updateUserInfo = catchAsync(async (req, res, next) => {
 
   if (avatar !== undefined) {
     new_data.avatar = avatar
-  }
-
-  if (gender !== undefined) {
-    const values = ['male', 'female']
-    if (!values.some((item) => item === gender)) {
-      return next(
-        appError(
-          {
-            message: '請選擇性別',
-            statusCode: 400
-          },
-          next
-        )
-      )
-    }
-    new_data.gender = gender
   }
 
   const data = await User.findByIdAndUpdate(user_id, new_data, {
