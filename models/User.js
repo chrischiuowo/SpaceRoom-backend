@@ -30,8 +30,8 @@ const userSchema = new Schema(
       type: Object,
       required: false,
       default: {
-        link: '',
-        hash: ''
+        link: null,
+        hash: null
       }
     },
     // 追蹤名單
