@@ -27,6 +27,25 @@ const getUserInfo = catchAsync(async (req, res, next) => {
 })
 
 /*
+  刪除目前使用者資訊 DELETE
+*/
+const deleteUserInfo = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
+
+  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
+
+  const data = await User.findByIdAndDelete(user_id)
+
+  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  successHandle({
+    res,
+    message: '刪除使用者資料成功',
+    data
+  })
+})
+
+/*
   更新使用者資訊 PATCH
 */
 const updateUserInfo = catchAsync(async (req, res, next) => {
@@ -143,6 +162,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 
 module.exports = {
   getUserInfo,
+  deleteUserInfo,
   updateUserInfo,
   updatePassword
 }
