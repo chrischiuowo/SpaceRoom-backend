@@ -142,6 +142,34 @@ const getPostLikes = catchAsync(async (req, res, next) => {
 })
 
 /*
+  取得使用者留言的貼文 GET
+*/
+const getPostComments = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
+
+  if (!user_id) {
+    return next(appError(apiMessage.FIELD_FAILED, next))
+  }
+
+  const data = await Post.find({ user: user_id })
+    .populate({
+      path: 'user',
+      select: 'name avatar'
+    })
+    .populate({
+      path: 'comments'
+    })
+
+  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  successHandle({
+    res,
+    message: '取得使用者貼文留言成功',
+    data
+  })
+})
+
+/*
   上傳單一貼文 POST
 */
 const createPost = catchAsync(async (req, res, next) => {
@@ -257,6 +285,7 @@ module.exports = {
   getUserPosts,
   getOnlyPost,
   getPostLikes,
+  getPostComments,
   createPost,
   updatePost,
   deleteOnlyPost,

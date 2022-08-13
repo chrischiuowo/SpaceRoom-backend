@@ -6,9 +6,6 @@ const { isAuth } = require('../middlewares/auth')
 // 取得目前使用者資訊
 router.get('/users/:user_id', isAuth, userController.getUserInfo)
 
-// 刪除目前使用者
-router.delete('/users/:user_id', isAuth, userController.deleteUserInfo)
-
 // 更新目前使用者資訊
 router.patch(
   '/users/:user_id',
@@ -16,7 +13,7 @@ router.patch(
   userController.updateUserInfo
 )
 
-// 更新密碼
-router.patch('/users/reset_password', isAuth, userController.updatePassword)
+// 刪除目前使用者
+router.delete('/users/:user_id', isAuth, userController.deleteUserInfo)
 
 module.exports = router

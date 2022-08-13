@@ -15,6 +15,9 @@ router.get('/posts/user/:user_id', isAuth, postController.getUserPosts)
 // 取得使用者按讚的貼文
 router.get('/posts/likes/:user_id', isAuth, postController.getPostLikes)
 
+// 取得使用者留言的貼文
+router.get('/posts/comments/:user_id', isAuth, postController.getPostComments)
+
 // 上傳單一貼文
 router.post('/post/1', isAuth, postController.createPost)
 

@@ -256,6 +256,80 @@ const logout = catchAsync(async (req, res, next) => {
 })
 
 /*
+  更新密碼 PATCH
+*/
+const updatePassword = catchAsync(async (req, res, next) => {
+  const { password, confirm_password } = req.body
+  const now_user_id = req.now_user_id
+  const err_code = 400
+  // 驗證項目不得為空
+  if (!password || !confirm_password) {
+    return next(
+      appError(
+        {
+          message: '填入項目不得為空',
+          statusCode: err_code
+        },
+        next
+      )
+    )
+  }
+  // 驗證密碼是否中英混合
+  if (!/(?=\w*\d)(?=\w*[a-zA-Z])\w+/.test(password)) {
+    return next(
+      appError(
+        {
+          message: '密碼應該為中英混合',
+          statusCode: err_code
+        },
+        next
+      )
+    )
+  }
+  // 驗證密碼是否超過８位數
+  if (!validator.isLength(password, { min: 8 })) {
+    return next(
+      appError(
+        {
+          message: '密碼至少 8 碼以上',
+          statusCode: err_code
+        },
+        next
+      )
+    )
+  }
+  // 驗證密碼是否一致
+  if (password !== confirm_password) {
+    return next(
+      appError(
+        {
+          message: '密碼不一致',
+          statusCode: err_code
+        },
+        next
+      )
+    )
+  }
+
+  // 加密密碼
+  const new_password = await bcrypt.hash(password, 12)
+
+  // 更新
+  const data = await User.findByIdAndUpdate(
+    now_user_id,
+    { password: new_password },
+    { new: true, runValidators: true }
+  )
+  if (!data) {
+    return next(appError(apiMessage.DATA_NOT_FOUND, next))
+  }
+  successHandle({
+    res,
+    message: '更新密碼成功'
+  })
+})
+
+/*
   驗證token GET
 */
 const checkToken = catchAsync(async (req, res, next) => {
@@ -322,5 +396,6 @@ module.exports = {
   login,
   signup,
   logout,
+  updatePassword,
   checkToken
 }

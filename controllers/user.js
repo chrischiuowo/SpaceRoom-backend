@@ -4,8 +4,6 @@ const successHandle = require('../service/successHandle')
 const catchAsync = require('../service/catchAsync')
 const appError = require('../service/appError')
 const apiMessage = require('../service/apiMessage')
-const validator = require('validator')
-const bcrypt = require('bcryptjs')
 
 /*
   取得目前使用者資訊 GET
@@ -22,25 +20,6 @@ const getUserInfo = catchAsync(async (req, res, next) => {
   successHandle({
     res,
     message: '取得使用者資料成功',
-    data
-  })
-})
-
-/*
-  刪除目前使用者資訊 DELETE
-*/
-const deleteUserInfo = catchAsync(async (req, res, next) => {
-  const { user_id } = req.params
-
-  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
-
-  const data = await User.findByIdAndDelete(user_id)
-
-  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
-
-  successHandle({
-    res,
-    message: '刪除使用者資料成功',
     data
   })
 })
@@ -86,83 +65,26 @@ const updateUserInfo = catchAsync(async (req, res, next) => {
 })
 
 /*
-  更新密碼 PATCH
+  刪除目前使用者資訊 DELETE
 */
-const updatePassword = catchAsync(async (req, res, next) => {
-  const { password, confirm_password } = req.body
-  const now_user_id = req.now_user_id
-  const err_code = 400
+const deleteUserInfo = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
 
-  // 驗證項目不得為空
-  if (!password || !confirm_password) {
-    return next(
-      appError(
-        {
-          message: '填入項目不得為空',
-          statusCode: err_code
-        },
-        next
-      )
-    )
-  }
-  // 驗證密碼是否中英混合
-  if (!/(?=\w*\d)(?=\w*[a-zA-Z])\w+/.test(password)) {
-    return next(
-      appError(
-        {
-          message: '密碼應該為中英混合',
-          statusCode: err_code
-        },
-        next
-      )
-    )
-  }
-  // 驗證密碼是否超過８位數
-  if (!validator.isLength(password, { min: 8 })) {
-    return next(
-      appError(
-        {
-          message: '密碼至少 8 碼以上',
-          statusCode: err_code
-        },
-        next
-      )
-    )
-  }
-  // 驗證密碼是否一致
-  if (password !== confirm_password) {
-    return next(
-      appError(
-        {
-          message: '密碼不一致',
-          statusCode: err_code
-        },
-        next
-      )
-    )
-  }
+  if (!user_id) return next(appError(apiMessage.FIELD_FAILED, next))
 
-  // 加密密碼
-  const new_password = await bcrypt.hash(password, 12)
+  const data = await User.findByIdAndDelete(user_id)
 
-  // 更新
-  const data = await User.findByIdAndUpdate(
-    now_user_id,
-    { password: new_password },
-    { new: true, runValidators: true }
-  )
-  if (!data) {
-    return next(appError(apiMessage.DATA_NOT_FOUND, next))
-  }
+  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
   successHandle({
     res,
-    message: '更新密碼成功'
+    message: '刪除使用者資料成功',
+    data
   })
 })
 
 module.exports = {
   getUserInfo,
   deleteUserInfo,
-  updateUserInfo,
-  updatePassword
+  updateUserInfo
 }
