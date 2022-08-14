@@ -16,7 +16,7 @@ const getPosts = catchAsync(async (req, res, next) => {
   const { q, s, p, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
-    s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
+    s === 'hot' ? { likes: -1 } : s === 'old' ? 'createdAt' : '-createdAt'
   const commonSort = cs === 'old' ? 1 : -1
   const limit = p ? 8 : 0
   const skip = p === 1 ? 0 : (p - 1) * limit
@@ -82,7 +82,7 @@ const getUserPosts = catchAsync(async (req, res, next) => {
   const { q, s, p, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
-    s === 'hot' ? { likes: -1 } : s === 'new' ? '-createdAt' : 'createdAt'
+    s === 'hot' ? { likes: -1 } : s === 'old' ? 'createdAt' : '-createdAt'
   const commonSort = cs === 'old' ? 1 : -1
   const limit = p ? 8 : 0
   const skip = p === 1 ? 0 : (p - 1) * limit

@@ -6,6 +6,44 @@ const appError = require('../service/appError')
 const apiMessage = require('../service/apiMessage')
 
 /*
+  隨機搜尋使用者 GET
+*/
+const getRandomUsers = catchAsync(async (req, res, next) => {
+  const count = await User.estimatedDocumentCount()
+  const random = Math.floor(Math.random() * count)
+
+  const data = await User.find()
+    .skip(random)
+
+  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  successHandle({
+    res,
+    message: '隨機取得使用者成功',
+    data
+  })
+})
+
+/*
+  搜尋使用者 GET
+*/
+const getUsers = catchAsync(async (req, res, next) => {
+  // su => 搜尋使用者
+  const { q } = req.query
+  const query = q ? { name: new RegExp(q) } : {}
+
+  const data = await User.find(query)
+
+  if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  successHandle({
+    res,
+    message: '取得使用者成功',
+    data
+  })
+})
+
+/*
   取得目前使用者資訊 GET
 */
 const getUserInfo = catchAsync(async (req, res, next) => {
@@ -84,6 +122,8 @@ const deleteUserInfo = catchAsync(async (req, res, next) => {
 })
 
 module.exports = {
+  getRandomUsers,
+  getUsers,
   getUserInfo,
   deleteUserInfo,
   updateUserInfo
