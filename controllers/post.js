@@ -13,12 +13,13 @@ const getPosts = catchAsync(async (req, res, next) => {
   // q => 搜尋項目
   // s => 資料排序
   // p => 取得頁數
-  const { q, s, p, cs } = req.query
+  // l => 限制則數
+  const { q, s, p, l, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'old' ? 'createdAt' : '-createdAt'
   const commonSort = cs === 'old' ? 1 : -1
-  const limit = p ? 8 : 0
+  const limit = p ? 8 : l || 0
   const skip = p === 1 ? 0 : (p - 1) * limit
 
   const data = await Post.find(query)
@@ -79,12 +80,12 @@ const getUserPosts = catchAsync(async (req, res, next) => {
   // s => 資料排序
   // p => 取得頁數
   const { user_id } = req.params
-  const { q, s, p, cs } = req.query
+  const { q, s, p, l, cs } = req.query
   const query = q ? { content: new RegExp(q) } : {}
   const sort =
     s === 'hot' ? { likes: -1 } : s === 'old' ? 'createdAt' : '-createdAt'
   const commonSort = cs === 'old' ? 1 : -1
-  const limit = p ? 8 : 0
+  const limit = p ? 8 : l || 0
   const skip = p === 1 ? 0 : (p - 1) * limit
 
   if (!user_id) {
