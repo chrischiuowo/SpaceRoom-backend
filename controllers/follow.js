@@ -40,8 +40,8 @@ const getFollowsList = catchAsync(async (req, res, next) => {
   按讚貼文 與 取消讚貼文 PATCH
 */
 const toggleFollows = catchAsync(async (req, res, next) => {
-  const { user_id, follow_mode } = req.query
-  const now_user_id = req.now_user_id
+  const { user_id, follow_mode, target_id } = req.query
+  const now_user_id = target_id || req.now_user_id
   const follow_toggle = follow_mode === 'follow'
   let data
 
