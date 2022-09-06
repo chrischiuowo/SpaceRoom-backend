@@ -10,10 +10,11 @@ const apiMessage = require('../service/apiMessage')
 */
 const getRandomUsers = catchAsync(async (req, res, next) => {
   const count = await User.estimatedDocumentCount()
-  const random = Math.floor(Math.random() * count)
+  const random = count <= 5 ? 0 : Math.floor(Math.random() * count)
 
   const data = await User.find()
     .skip(random)
+    .limit(5)
 
   if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
