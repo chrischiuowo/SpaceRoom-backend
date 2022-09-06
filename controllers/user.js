@@ -1,9 +1,46 @@
-// User Controller
 const User = require('../models/User')
+const Post = require('../models/Post')
 const successHandle = require('../service/successHandle')
 const catchAsync = require('../service/catchAsync')
 const appError = require('../service/appError')
 const apiMessage = require('../service/apiMessage')
+
+/*
+  個人貼文牆資訊 GET
+*/
+const getUserProfile = catchAsync(async (req, res, next) => {
+  const { user_id } = req.params
+
+  if (!user_id) {
+    return next(appError(apiMessage.FIELD_FAILED, next))
+  }
+
+  const postData = await Post.find({ user: user_id })
+    .populate({
+      path: 'user',
+      select: 'name avatar'
+    })
+    .populate({
+      path: 'comments',
+      options: { sort: { createdAt: -1 } }
+    })
+    .sort('-createdAt')
+
+  if (!postData) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  const userData = await User.findById(user_id)
+
+  if (!userData) return next(appError(apiMessage.DATA_NOT_FOUND, next))
+
+  successHandle({
+    res,
+    message: '取得使用者貼文牆資料成功',
+    data: {
+      user: userData,
+      post: postData
+    }
+  })
+})
 
 /*
   隨機搜尋使用者 GET
@@ -123,6 +160,7 @@ const deleteUserInfo = catchAsync(async (req, res, next) => {
 })
 
 module.exports = {
+  getUserProfile,
   getRandomUsers,
   getUsers,
   getUserInfo,

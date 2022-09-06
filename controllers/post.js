@@ -1,6 +1,4 @@
-// Post Controller
 const Post = require('../models/Post')
-// const User = require('../models/User')
 const successHandle = require('../service/successHandle')
 const catchAsync = require('../service/catchAsync')
 const appError = require('../service/appError')
