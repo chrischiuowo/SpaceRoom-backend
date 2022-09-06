@@ -3,6 +3,8 @@ const router = express.Router()
 const userController = require('../controllers/user')
 const { isAuth } = require('../middlewares/auth')
 
+router.get('/user/notice/:user_id', isAuth, userController.getUserNotice)
+
 router.get('/user/profile/:user_id', isAuth, userController.getUserProfile)
 
 router.get('/random_users', isAuth, userController.getRandomUsers)
