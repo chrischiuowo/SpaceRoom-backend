@@ -44,7 +44,8 @@ const getUserNotice = catchAsync(async (req, res, next) => {
   const commentPosts = await Post.find({ user: now_user_id })
     .select('_id comment')
     .populate({
-      path: 'comments'
+      path: 'comments',
+      select: 'post user createdAt'
     })
 
   if (!commentPosts) return next(appError(apiMessage.DATA_NOT_FOUND, next))
@@ -69,6 +70,8 @@ const getUserNotice = catchAsync(async (req, res, next) => {
       })
     }
   })
+  commentsData = commentsData.filter(data => !data.user._id.equals(now_user_id))
+  repliesData = repliesData.filter(data => !data.user._id.equals(now_user_id))
 
   successHandle({
     res,
