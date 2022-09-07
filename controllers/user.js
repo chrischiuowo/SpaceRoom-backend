@@ -31,7 +31,7 @@ const getUserNotice = catchAsync(async (req, res, next) => {
 
   // 最新的 15 筆貼文
   const newPosts = await Post.find({})
-    .select('_id user')
+    .select('_id user createdAt')
     .limit(15)
     .populate({
       path: 'user',
