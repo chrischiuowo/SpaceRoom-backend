@@ -17,36 +17,39 @@ const getUserNotice = catchAsync(async (req, res, next) => {
 
   // 追蹤名單
   const followingLists = await User.find({ _id: now_user_id })
-    .select(['_id', 'followings', 'followers'])
+    .select('followings followers')
     .populate({
       path: 'followings.user',
-      select: 'name'
+      select: '_id name'
     })
     .populate({
       path: 'followers.user',
-      select: 'name'
+      select: '_id name'
     })
 
   if (!followingLists) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
   // 最新的 15 筆貼文
   const newPosts = await Post.find({})
-    .sort('-createdAt')
-    .select('_id, user')
+    .select('_id user')
     .limit(15)
+    .populate({
+      path: 'user',
+      select: '_id name'
+    })
 
   if (!newPosts) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
   // 使用者貼文的留言
   const commentPosts = await Post.find({ user: now_user_id })
-    .select('_id, comment')
+    .select('_id comment')
     .populate({
       path: 'comments'
     })
 
   if (!commentPosts) return next(appError(apiMessage.DATA_NOT_FOUND, next))
 
-  const postData = followingLists[0].followings.filter(({ user: user1 }) => newPosts.some(({ user: user2 }) => user2.equals(user1._id)))
+  const postData = newPosts.filter(({ user: user1 }) => followingLists[0].followings.some(({ user: user2 }) => user2.equals(user1._id)))
   const followerData = followingLists[0].followers.sort(function (a, b) {
     return b.createdAt - a.createdAt
   })
