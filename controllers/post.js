@@ -58,7 +58,8 @@ const getOnlyPost = catchAsync(async (req, res, next) => {
       select: 'name avatar'
     })
     .populate({
-      path: 'comments'
+      path: 'comments',
+      options: { sort: { createdAt: -1 } }
     })
 
   if (!data) return next(appError(apiMessage.DATA_NOT_FOUND, next))
