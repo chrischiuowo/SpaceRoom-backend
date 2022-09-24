@@ -315,11 +315,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
   const new_password = await bcrypt.hash(password, 12)
 
   // 更新
-  const data = await User.findByIdAndUpdate(
-    now_user_id,
-    { password: new_password },
-    { new: true, runValidators: true }
-  )
+  const data = await User.findByIdAndUpdate(now_user_id, { password: new_password }, { new: true, runValidators: true })
   if (!data) {
     return next(appError(apiMessage.DATA_NOT_FOUND, next))
   }
@@ -335,10 +331,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
 const checkToken = catchAsync(async (req, res, next) => {
   // 確認 token
   let token
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
   }
   if (!token) {

@@ -45,13 +45,20 @@ const toggleFollows = catchAsync(async (req, res, next) => {
   const follow_toggle = follow_mode === 'follow'
   let data
 
-  if (!user_id || !follow_mode) { return next(appError(apiMessage.FIELD_FAILED, next)) }
+  if (!user_id || !follow_mode) {
+    return next(appError(apiMessage.FIELD_FAILED, next))
+  }
 
   if (now_user_id.toString() === user_id) {
-    return next(appError({
-      message: '不能追蹤自己',
-      statusCode: 400
-    }, next))
+    return next(
+      appError(
+        {
+          message: '不能追蹤自己',
+          statusCode: 400
+        },
+        next
+      )
+    )
   }
 
   // 追蹤
@@ -101,10 +108,15 @@ const toggleFollows = catchAsync(async (req, res, next) => {
 
   if (follow_toggle) {
     if (!data) {
-      return next(appError({
-        message: '已經追蹤對方',
-        statusCode: 400
-      }, next))
+      return next(
+        appError(
+          {
+            message: '已經追蹤對方',
+            statusCode: 400
+          },
+          next
+        )
+      )
     }
     successHandle({
       res,
@@ -113,10 +125,15 @@ const toggleFollows = catchAsync(async (req, res, next) => {
     })
   } else {
     if (!data) {
-      return next(appError({
-        message: '已經取消追蹤對方',
-        statusCode: 400
-      }, next))
+      return next(
+        appError(
+          {
+            message: '已經取消追蹤對方',
+            statusCode: 400
+          },
+          next
+        )
+      )
     }
     successHandle({
       res,

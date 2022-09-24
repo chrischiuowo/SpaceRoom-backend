@@ -19,11 +19,7 @@ router.patch('/post/1/:post_id', isAuth, postController.updatePost)
 
 router.delete('/post/1/:post_id', isAuth, postController.deleteOnlyPost)
 
-router.delete(
-  '/posts/user/:user_id',
-  isAuth,
-  postController.deleteUserPosts
-)
+router.delete('/posts/user/:user_id', isAuth, postController.deleteUserPosts)
 
 router.delete('/posts', isAuth, postController.deletePosts)
 

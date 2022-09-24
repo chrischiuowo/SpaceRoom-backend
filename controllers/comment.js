@@ -73,11 +73,7 @@ const updateComment = catchAsync(async (req, res, next) => {
   const comment = await Comment.findById(comment_id)
 
   if (comment) {
-    const data = await Comment.findOneAndUpdate(
-      { _id: comment_id, post: comment.post },
-      { content },
-      { new: true }
-    )
+    const data = await Comment.findOneAndUpdate({ _id: comment_id, post: comment.post }, { content }, { new: true })
     successHandle({
       res,
       message: '更新貼文留言成功',

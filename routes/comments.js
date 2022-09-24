@@ -9,17 +9,9 @@ router.post('/comment/1/:post_id', isAuth, commentController.postComment)
 
 router.patch('/comment/1/:comment_id', isAuth, commentController.updateComment)
 
-router.delete(
-  '/comment/1/:comment_id',
-  isAuth,
-  commentController.deleteComment
-)
+router.delete('/comment/1/:comment_id', isAuth, commentController.deleteComment)
 
-router.post(
-  '/comment/reply/1/:post_id/:comment_id',
-  isAuth,
-  commentController.postCommentReply
-)
+router.post('/comment/reply/1/:post_id/:comment_id', isAuth, commentController.postCommentReply)
 
 router.patch('/comment/reply/1/:reply_id', isAuth, commentController.updateCommentReply)
 

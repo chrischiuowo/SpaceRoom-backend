@@ -13,11 +13,7 @@ router.get('/users', isAuth, userController.getUsers)
 
 router.get('/user/:user_id', isAuth, userController.getUserInfo)
 
-router.patch(
-  '/user/:user_id',
-  isAuth,
-  userController.updateUserInfo
-)
+router.patch('/user/:user_id', isAuth, userController.updateUserInfo)
 
 router.delete('/user/:user_id', isAuth, userController.deleteUserInfo)
 
